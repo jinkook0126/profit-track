@@ -1,12 +1,12 @@
 {
   "functions": {
-    "api/**/*.js": {
+    "app/routes/api/**/*.js": {
       "includeFiles": "node_modules/@napi-rs/canvas/**/*"
     },
-    "api/**/*.ts": {
+    "app/routes/api/**/*.ts": {
       "includeFiles": "node_modules/@napi-rs/canvas/**/*"
     },
-    "api/**/*.mjs": {
+    "app/routes/api/**/*.mjs": {
       "includeFiles": "node_modules/@napi-rs/canvas/**/*"
     }
   }
