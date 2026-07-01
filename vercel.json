@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/**/*.js": {
+      "includeFiles": "node_modules/@napi-rs/canvas/**/*"
+    },
+    "api/**/*.ts": {
+      "includeFiles": "node_modules/@napi-rs/canvas/**/*"
+    },
+    "api/**/*.mjs": {
+      "includeFiles": "node_modules/@napi-rs/canvas/**/*"
+    }
+  }
+}
