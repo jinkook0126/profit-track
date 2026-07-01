@@ -1,0 +1,97 @@
+{
+  "version": "2.0",
+  "lastUpdated": "2026-07-01T07:19:12.753Z",
+  "activeFeatures": [
+    "income-calculator",
+    "routes"
+  ],
+  "primaryFeature": "income-calculator",
+  "features": {
+    "income-calculator": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-07-01T06:18:30.831Z",
+        "lastUpdated": "2026-07-01T07:19:12.753Z"
+      },
+      "lastFile": "D:\\jinqook\\profit-track\\app\\components\\income-calculator\\hooks\\use-income-calculator.ts"
+    },
+    "routes": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-07-01T06:20:19.963Z",
+        "lastUpdated": "2026-07-01T06:20:19.963Z"
+      },
+      "lastFile": "D:\\jinqook\\profit-track\\app\\routes\\index.tsx"
+    }
+  },
+  "pipeline": {
+    "currentPhase": 1,
+    "level": "Dynamic",
+    "phaseHistory": []
+  },
+  "session": {
+    "startedAt": "2026-07-01T05:39:23.200Z",
+    "onboardingCompleted": false,
+    "lastActivity": "2026-07-01T07:19:12.753Z"
+  },
+  "history": [
+    {
+      "timestamp": "2026-07-01T06:18:30.831Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-01T06:18:34.853Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-01T06:18:44.524Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-01T06:18:54.122Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-01T06:20:19.964Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-01T07:18:24.860Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-01T07:19:03.606Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-01T07:19:12.753Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import { useFetcher } from 'react-router';
 import { IncomeCalculator } from '@/components/income-calculator';
 import type { Transaction } from '@/types/table';
 
-import type { Route } from './+types/home';
+import type { Route } from './+types/index';
 
 export function meta(_: Route.MetaArgs) {
   return [
@@ -22,7 +22,7 @@ type PdfParsingResult = {
  * TODO: xlsx 등을 사용해 엑셀 다운로드를 구현하세요.
  */
 function downloadExcel(_rows: Transaction[]): void {
-  alert('엑셀 다운로드를 구현해주세요.');
+  alert('엑셀 다운로드 구현 예정');
 }
 
 export default function Home() {
