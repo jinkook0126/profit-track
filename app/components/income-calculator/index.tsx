@@ -10,13 +10,33 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import type { Transaction } from '@/types/table';
 
-import type { AppStatus, Transaction } from './types';
+import type { AppStatus } from './types';
 
 // ---------- helpers ----------
 
 function fmt(n: number): string {
   return Math.round(n || 0).toLocaleString('ko-KR');
+}
+
+function parseAmount(amount?: string): number {
+  return Number((amount ?? '').replace(/,/g, '')) || 0;
+}
+
+function formatDateTime(transactionDate?: string, transactionTime?: string): string {
+  const date = transactionDate ?? '';
+  const time = transactionTime ?? '';
+  return [date, time].filter(Boolean).join(' ') || '—';
+}
+
+function getMonthKey(transactionDate?: string): string {
+  if (!transactionDate) return 'unknown';
+  return transactionDate.slice(0, 7);
+}
+
+function isIncome(transactionType?: string): boolean {
+  return transactionType === '입금';
 }
 
 function computeMonthly(rows: Transaction[]) {
@@ -25,13 +45,16 @@ function computeMonthly(rows: Transaction[]) {
   const mmap = new Map<string, { income: number; expense: number }>();
 
   for (const r of rows) {
-    const a = r.gubun === '수입' ? r.deposit || r.withdraw : r.withdraw || r.deposit;
-    if (r.gubun === '수입') tIn += a;
-    else tOut += a;
-    const m = mmap.get(r.monthKey) ?? { income: 0, expense: 0 };
-    if (r.gubun === '수입') m.income += a;
-    else m.expense += a;
-    mmap.set(r.monthKey, m);
+    const amount = parseAmount(r.amount);
+    const monthKey = getMonthKey(r.transactionDate);
+
+    if (isIncome(r.transactionType)) tIn += amount;
+    else tOut += amount;
+
+    const m = mmap.get(monthKey) ?? { income: 0, expense: 0 };
+    if (isIncome(r.transactionType)) m.income += amount;
+    else m.expense += amount;
+    mmap.set(monthKey, m);
   }
 
   const monthly = [...mmap.entries()]
@@ -269,10 +292,12 @@ export function IncomeCalculator({ parsePdf, downloadExcel }: IncomeCalculatorPr
 
   const reset = useCallback(() => setState(INITIAL), []);
 
-  const setGubun = useCallback((id: string, gubun: '수입' | '지출') => {
+  const setGubun = useCallback((index: number, gubun: '수입' | '지출') => {
     setState((s) => ({
       ...s,
-      rows: s.rows.map((r) => (r.id === id ? { ...r, gubun } : r)),
+      rows: s.rows.map((r, i) =>
+        i === index ? { ...r, transactionType: gubun === '수입' ? '입금' : '출금' } : r,
+      ),
     }));
   }, []);
 
@@ -324,10 +349,6 @@ export function IncomeCalculator({ parsePdf, downloadExcel }: IncomeCalculatorPr
             <span className="text-[11.5px] font-medium text-[#aec4e8]">
               은행 거래내역 PDF → 월별 순수익 산출
             </span>
-          </div>
-          <div className="ml-auto flex items-center gap-2 text-[11.5px] font-semibold text-[#aec4e8]">
-            <span className="h-[7px] w-[7px] rounded-full bg-[#5fd6a0] shadow-[0_0_0_3px_rgba(95,214,160,.2)]" />
-            브라우저 내 처리 · 데이터 외부 전송 없음
           </div>
         </div>
       </header>
@@ -430,40 +451,40 @@ export function IncomeCalculator({ parsePdf, downloadExcel }: IncomeCalculatorPr
                   <TableBody>
                     {state.rows.map((row, i) => (
                       <TableRow
-                        key={row.id}
+                        key={`${row.transactionDate}-${row.transactionTime}-${i}`}
                         className={cn(
                           'border-b border-[#f0f3f8] hover:bg-transparent',
                           i % 2 === 1 ? 'bg-[#fafbfd]' : 'bg-white',
                         )}
                       >
                         <TableCell className="py-2.5 pr-3.5 pl-3.5 whitespace-nowrap text-[#42526b] tabular-nums">
-                          {row.date}
+                          {formatDateTime(row.transactionDate, row.transactionTime)}
                         </TableCell>
                         <TableCell className="py-2.5 pr-3.5 pl-3.5">
                           <div className="flex justify-center gap-1.5">
                             <GubunPill
                               kind="수입"
-                              active={row.gubun === '수입'}
-                              onClick={() => setGubun(row.id, '수입')}
+                              active={isIncome(row.transactionType)}
+                              onClick={() => setGubun(i, '수입')}
                             />
                             <GubunPill
                               kind="지출"
-                              active={row.gubun === '지출'}
-                              onClick={() => setGubun(row.id, '지출')}
+                              active={!isIncome(row.transactionType)}
+                              onClick={() => setGubun(i, '지출')}
                             />
                           </div>
                         </TableCell>
                         <TableCell className="max-w-[340px] py-2.5 pr-3.5 pl-3.5 text-[#26344c]">
-                          {row.desc || '—'}
+                          {row.description || '—'}
                         </TableCell>
                         <TableCell className="py-2.5 pr-3.5 pl-3.5 text-right font-bold text-[#0f6b41] tabular-nums">
-                          {row.deposit ? fmt(row.deposit) : '–'}
+                          {isIncome(row.transactionType) ? fmt(parseAmount(row.amount)) : '–'}
                         </TableCell>
                         <TableCell className="py-2.5 pr-3.5 pl-3.5 text-right font-bold text-[#a82e20] tabular-nums">
-                          {row.withdraw ? fmt(row.withdraw) : '–'}
+                          {!isIncome(row.transactionType) ? fmt(parseAmount(row.amount)) : '–'}
                         </TableCell>
                         <TableCell className="max-w-[200px] overflow-hidden py-2.5 pr-3.5 pl-3.5 text-[12.5px] text-ellipsis whitespace-nowrap text-[#6b7a90]">
-                          {row.memo || '—'}
+                          {row.note || '—'}
                         </TableCell>
                       </TableRow>
                     ))}

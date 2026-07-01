@@ -1,5 +1,8 @@
+import { useCallback, useEffect, useRef } from 'react';
+import { useFetcher } from 'react-router';
+
 import { IncomeCalculator } from '@/components/income-calculator';
-import type { Transaction } from '@/components/income-calculator/types';
+import type { Transaction } from '@/types/table';
 
 import type { Route } from './+types/home';
 
@@ -10,13 +13,10 @@ export function meta(_: Route.MetaArgs) {
   ];
 }
 
-/**
- * TODO: 이 함수에 실제 PDF 파싱 로직을 구현하세요.
- * pdfjs-dist 등을 사용해 file을 파싱하고 Transaction[] 을 반환하면 됩니다.
- */
-async function parsePdf(_file: File): Promise<Transaction[]> {
-  throw new Error('PDF 파싱 기능이 아직 구현되지 않았습니다.');
-}
+type PdfParsingResult = {
+  transactions?: Transaction[];
+  error?: string;
+};
 
 /**
  * TODO: xlsx 등을 사용해 엑셀 다운로드를 구현하세요.
@@ -26,5 +26,46 @@ function downloadExcel(_rows: Transaction[]): void {
 }
 
 export default function Home() {
+  const fetcher = useFetcher<PdfParsingResult>();
+  const pendingRef = useRef<{
+    resolve: (rows: Transaction[]) => void;
+    reject: (error: Error) => void;
+  } | null>(null);
+
+  useEffect(() => {
+    if (fetcher.state !== 'idle' || !pendingRef.current) return;
+
+    const pending = pendingRef.current;
+    pendingRef.current = null;
+
+    if (fetcher.data?.error) {
+      pending.reject(new Error(fetcher.data.error));
+      return;
+    }
+    pending.resolve(fetcher.data?.transactions ?? []);
+  }, [fetcher.state, fetcher.data]);
+
+  const parsePdf = useCallback(
+    (file: File) => {
+      if (fetcher.state !== 'idle') {
+        return Promise.reject(new Error('이미 파싱이 진행 중입니다.'));
+      }
+
+      return new Promise<Transaction[]>((resolve, reject) => {
+        pendingRef.current = { resolve, reject };
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetcher.submit(formData, {
+          method: 'POST',
+          action: '/api/pdf-parsing',
+          encType: 'multipart/form-data',
+        });
+      });
+    },
+    [fetcher],
+  );
+
   return <IncomeCalculator parsePdf={parsePdf} downloadExcel={downloadExcel} />;
 }
