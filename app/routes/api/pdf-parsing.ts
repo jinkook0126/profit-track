@@ -15,6 +15,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const formData = await request.formData();
   const file = formData.get('file');
+  const password = formData.get('password');
 
   if (!(file instanceof File)) {
     return data({ error: 'file 필드에 PDF 파일이 필요합니다.' }, { status: 400 });
@@ -22,7 +23,9 @@ export async function action({ request }: Route.ActionArgs) {
 
   try {
     const pdfData = new Uint8Array(await file.arrayBuffer());
-    const pdf = await getDocument({ data: pdfData }).promise;
+    const pdfOptions: Record<string, unknown> = { data: pdfData };
+    if (password) pdfOptions.password = String(password);
+    const pdf = await getDocument(pdfOptions).promise;
 
     const pages: string[][][] = [];
 
@@ -72,7 +75,13 @@ export async function action({ request }: Route.ActionArgs) {
     return data({ transactions });
   } catch (error) {
     console.error('PDF 파싱 실패:', error);
-    const message = error instanceof Error ? error.message : 'PDF 파싱 중 오류가 발생했습니다.';
-    return data({ error: message }, { status: 500 });
+
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    if (errorMessage.includes('No password given')) {
+      return data({ error: '비밀번호 보호된 PDF입니다.', requiresPassword: true }, { status: 401 });
+    }
+
+    return data({ error: errorMessage }, { status: 500 });
   }
 }

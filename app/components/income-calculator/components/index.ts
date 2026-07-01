@@ -4,6 +4,7 @@ export { ErrorPanel } from './error-panel';
 export { FileInfoBar } from './file-info-bar';
 export { GubunPill } from './gubun-pill';
 export { MonthlySummaryTable } from './monthly-summary-table';
+export { PasswordDialog } from './password-dialog';
 export { ParsingPanel } from './parsing-panel';
 export { ReadyPanel } from './ready-panel';
 export { Stepper } from './stepper';

@@ -18,6 +18,8 @@ export interface IncomeCalculatorState {
   rows: Transaction[];
   showSummary: boolean;
   errorMsg: string;
+  requiresPassword: boolean;
+  fileForPasswordRetry?: File;
 }
 
 export const INITIAL_INCOME_CALCULATOR_STATE: IncomeCalculatorState = {
@@ -26,6 +28,7 @@ export const INITIAL_INCOME_CALCULATOR_STATE: IncomeCalculatorState = {
   rows: [],
   showSummary: false,
   errorMsg: '',
+  requiresPassword: false,
 };
 
 // ─── Computation Results ───
@@ -50,8 +53,9 @@ export interface IncomeCalculatorProps {
   /**
    * PDF 파싱 구현체를 여기에 주입하세요.
    * file을 받아 Transaction[] 을 반환하는 async 함수입니다.
+   * 선택적으로 비밀번호를 두 번째 인자로 받을 수 있습니다.
    */
-  parsePdf: (file: File) => Promise<Transaction[]>;
+  parsePdf: (file: File, password?: string) => Promise<Transaction[]>;
   /**
    * 엑셀 다운로드 구현체 (선택). 없으면 버튼이 비활성화됩니다.
    */

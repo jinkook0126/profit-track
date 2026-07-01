@@ -16,6 +16,7 @@ export function meta(_: Route.MetaArgs) {
 type PdfParsingResult = {
   transactions?: Transaction[];
   error?: string;
+  requiresPassword?: boolean;
 };
 
 /**
@@ -39,14 +40,18 @@ export default function Home() {
     pendingRef.current = null;
 
     if (fetcher.data?.error) {
-      pending.reject(new Error(fetcher.data.error));
+      const error = new Error(fetcher.data.error);
+      if (fetcher.data.requiresPassword) {
+        (error as any).requiresPassword = true;
+      }
+      pending.reject(error);
       return;
     }
     pending.resolve(fetcher.data?.transactions ?? []);
   }, [fetcher.state, fetcher.data]);
 
   const parsePdf = useCallback(
-    (file: File) => {
+    (file: File, password?: string) => {
       if (fetcher.state !== 'idle') {
         return Promise.reject(new Error('이미 파싱이 진행 중입니다.'));
       }
@@ -56,6 +61,7 @@ export default function Home() {
 
         const formData = new FormData();
         formData.append('file', file);
+        if (password) formData.append('password', password);
 
         fetcher.submit(formData, {
           method: 'POST',
