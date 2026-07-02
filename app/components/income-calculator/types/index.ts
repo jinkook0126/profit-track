@@ -102,6 +102,7 @@ export interface TransactionTableProps {
   tIn: number;
   tOut: number;
   onGubunChange: (index: number, gubun: GubunKind) => void;
+  onExcludeChange: (index: number) => void;
 }
 
 export interface MonthlySummaryTableProps {
@@ -121,6 +122,7 @@ export interface ReadyPanelProps {
   tOut: number;
   onReset: () => void;
   onGubunChange: (index: number, gubun: GubunKind) => void;
+  onExcludeChange: (index: number) => void;
   onShowSummary: () => void;
   onDownloadExcel?: () => void;
   downloadDisabled: boolean;

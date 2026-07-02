@@ -16,4 +16,5 @@ export interface Transaction {
   transactionType?: string;
   description?: string;
   note?: string;
+  excluded?: boolean;
 }

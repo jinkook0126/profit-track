@@ -20,6 +20,7 @@ type Action =
   | { type: 'PASSWORD_REQUIRED'; fileName: string; file: File }
   | { type: 'CLEAR_PASSWORD' }
   | { type: 'SET_GUBUN'; index: number; gubun: GubunKind }
+  | { type: 'TOGGLE_EXCLUDED'; index: number }
   | { type: 'SHOW_SUMMARY' };
 
 function reducer(state: IncomeCalculatorState, action: Action): IncomeCalculatorState {
@@ -54,6 +55,13 @@ function reducer(state: IncomeCalculatorState, action: Action): IncomeCalculator
             : r,
         ),
       };
+    case 'TOGGLE_EXCLUDED':
+      return {
+        ...state,
+        rows: state.rows.map((r: Transaction, i: number) =>
+          i === action.index ? { ...r, excluded: !r.excluded } : r,
+        ),
+      };
     case 'SHOW_SUMMARY':
       return { ...state, showSummary: true };
     default:
@@ -73,6 +81,10 @@ export function useIncomeCalculator({ parsePdf, downloadExcel }: IncomeCalculato
 
   const setGubun = useCallback((index: number, gubun: GubunKind) => {
     dispatch({ type: 'SET_GUBUN', index, gubun });
+  }, []);
+
+  const toggleExcluded = useCallback((index: number) => {
+    dispatch({ type: 'TOGGLE_EXCLUDED', index });
   }, []);
 
   const handleFile = useCallback(
@@ -180,6 +192,7 @@ export function useIncomeCalculator({ parsePdf, downloadExcel }: IncomeCalculato
     activeStep,
     reset,
     setGubun,
+    toggleExcluded,
     handleFile,
     handleFiles,
     showSummary,

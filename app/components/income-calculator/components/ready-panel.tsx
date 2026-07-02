@@ -12,6 +12,7 @@ export function ReadyPanel({
   tOut,
   onReset,
   onGubunChange,
+  onExcludeChange,
   onShowSummary,
   onDownloadExcel,
   downloadDisabled,
@@ -20,7 +21,13 @@ export function ReadyPanel({
     <div className="flex animate-[scfade_.35s_ease] flex-col gap-5">
       <FileInfoBar fileName={fileName} rowCount={rows.length} onReset={onReset} />
 
-      <TransactionTable rows={rows} tIn={tIn} tOut={tOut} onGubunChange={onGubunChange} />
+      <TransactionTable
+        rows={rows}
+        tIn={tIn}
+        tOut={tOut}
+        onGubunChange={onGubunChange}
+        onExcludeChange={onExcludeChange}
+      />
 
       <div className="flex flex-wrap items-center gap-3.5">
         <button

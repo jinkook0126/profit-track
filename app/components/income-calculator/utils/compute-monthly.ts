@@ -10,6 +10,7 @@ export function computeMonthly(rows: Transaction[]): MonthlyComputeResult {
   const mmap = new Map<string, { income: number; expense: number }>();
 
   for (const r of rows) {
+    if (r.excluded) continue;
     const amount = parseAmount(r.amount);
     const monthKey = getMonthKey(r.transactionDate);
 
