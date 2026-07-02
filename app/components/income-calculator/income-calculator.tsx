@@ -4,8 +4,8 @@ import {
   CalculatorHeader,
   EmptyPanel,
   ErrorPanel,
-  PasswordDialog,
   ParsingPanel,
+  PasswordDialog,
   ReadyPanel,
   Stepper,
   UploadZone,
@@ -14,8 +14,17 @@ import { useIncomeCalculator } from './hooks';
 import type { IncomeCalculatorProps } from './types';
 
 export function IncomeCalculator(props: IncomeCalculatorProps) {
-  const { state, computed, activeStep, reset, setGubun, handleFile, showSummary, downloadExcel, retryWithPassword } =
-    useIncomeCalculator(props);
+  const {
+    state,
+    computed,
+    activeStep,
+    reset,
+    setGubun,
+    handleFiles,
+    showSummary,
+    downloadExcel,
+    retryWithPassword,
+  } = useIncomeCalculator(props);
   const { monthly, tIn, tOut } = computed;
 
   const handlePasswordSubmit = useCallback(
@@ -32,9 +41,11 @@ export function IncomeCalculator(props: IncomeCalculatorProps) {
       <main className="mx-auto w-full max-w-[1240px] flex-1 px-7 pt-[30px] pb-14">
         <Stepper step={activeStep} />
 
-        {state.status === 'idle' && <UploadZone onFile={handleFile} />}
+        {state.status === 'idle' && <UploadZone onFiles={handleFiles} />}
         {state.status === 'parsing' && <ParsingPanel fileName={state.fileName} />}
-        {state.status === 'error' && !state.requiresPassword && <ErrorPanel message={state.errorMsg} onReset={reset} />}
+        {state.status === 'error' && !state.requiresPassword && (
+          <ErrorPanel message={state.errorMsg} onReset={reset} />
+        )}
         {state.status === 'error' && state.requiresPassword && (
           <ErrorPanel message={state.errorMsg} onReset={reset} />
         )}

@@ -69,7 +69,7 @@ export interface StepperProps {
 }
 
 export interface UploadZoneProps {
-  onFile: (file: File) => void;
+  onFiles: (files: File[]) => void;
 }
 
 export interface ParsingPanelProps {

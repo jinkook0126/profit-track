@@ -4,15 +4,16 @@ import { cn } from '@/lib/utils';
 
 import type { UploadZoneProps } from '../types';
 
-export function UploadZone({ onFile }: UploadZoneProps) {
+export function UploadZone({ onFiles }: UploadZoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
 
-  const handleFile = useCallback(
-    (file: File | null | undefined) => {
-      if (file) onFile(file);
+  const handleFiles = useCallback(
+    (fileList: FileList | null | undefined) => {
+      if (!fileList || fileList.length === 0) return;
+      onFiles(Array.from(fileList));
     },
-    [onFile],
+    [onFiles],
   );
 
   return (
@@ -29,7 +30,7 @@ export function UploadZone({ onFile }: UploadZoneProps) {
       onDrop={(e) => {
         e.preventDefault();
         setDragging(false);
-        handleFile(e.dataTransfer.files?.[0]);
+        handleFiles(e.dataTransfer.files);
       }}
       className={cn(
         'flex cursor-pointer flex-col items-center justify-center gap-4 rounded-[18px] border-2 border-dashed bg-white px-8 py-16 text-center transition-all duration-150 outline-none',
@@ -42,8 +43,9 @@ export function UploadZone({ onFile }: UploadZoneProps) {
         ref={inputRef}
         type="file"
         accept="application/pdf,.pdf"
+        multiple
         className="hidden"
-        onChange={(e) => handleFile(e.target.files?.[0])}
+        onChange={(e) => handleFiles(e.target.files)}
       />
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#eaf1fd] font-mono text-[15px] font-extrabold tracking-wide text-[#123a78]">
         PDF
@@ -55,7 +57,7 @@ export function UploadZone({ onFile }: UploadZoneProps) {
         <p className="text-[13px] leading-relaxed text-[#6b7a90]">
           이 영역에 파일을 끌어다 놓거나 클릭해서 선택합니다.
           <br />
-          은행에서 내려받은 거래내역서 PDF를 지원합니다.
+          여러 PDF를 동시에 선택해 합산할 수 있습니다.
         </p>
       </div>
       <span className="mt-1 rounded-[10px] bg-[#123a78] px-[22px] py-[11px] text-[13.5px] font-bold text-white shadow-[0_4px_12px_rgba(18,58,120,.28)]">

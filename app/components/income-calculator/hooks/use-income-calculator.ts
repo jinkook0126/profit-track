@@ -96,7 +96,6 @@ export function useIncomeCalculator({ parsePdf, downloadExcel }: IncomeCalculato
         const error = e as any;
         const errorMessage = error?.message || String(e);
 
-        // 비밀번호 필요 에러 감지 (클라이언트 측 PDF 로드 에러)
         if (
           errorMessage.includes('No password given') ||
           errorMessage.includes('password required') ||
@@ -107,6 +106,57 @@ export function useIncomeCalculator({ parsePdf, downloadExcel }: IncomeCalculato
         } else {
           dispatch({ type: 'ERROR', errorMsg: errorMessage });
         }
+      }
+    },
+    [parsePdf],
+  );
+
+  const handleFiles = useCallback(
+    async (files: File[]) => {
+      const validFiles = files.filter(
+        (f) => /\.pdf$/i.test(f.name) || f.type === 'application/pdf',
+      );
+
+      if (validFiles.length === 0) {
+        dispatch({ type: 'ERROR', errorMsg: 'PDF 파일만 업로드할 수 있습니다.' });
+        return;
+      }
+
+      const displayName =
+        validFiles.length === 1
+          ? validFiles[0].name
+          : `${validFiles[0].name} 외 ${validFiles.length - 1}개`;
+
+      dispatch({ type: 'PARSING', fileName: displayName });
+
+      const allRows: Transaction[] = [];
+
+      for (const file of validFiles) {
+        try {
+          const rows = await parsePdf(file);
+          allRows.push(...rows);
+        } catch (e) {
+          const error = e as any;
+          const errorMessage = error?.message || String(e);
+
+          if (
+            errorMessage.includes('No password given') ||
+            errorMessage.includes('password required') ||
+            errorMessage.includes('Invalid password') ||
+            error?.requiresPassword
+          ) {
+            dispatch({ type: 'PASSWORD_REQUIRED', fileName: file.name, file });
+          } else {
+            dispatch({ type: 'ERROR', errorMsg: errorMessage });
+          }
+          return;
+        }
+      }
+
+      if (allRows.length === 0) {
+        dispatch({ type: 'EMPTY' });
+      } else {
+        dispatch({ type: 'PARSED', rows: allRows });
       }
     },
     [parsePdf],
@@ -131,6 +181,7 @@ export function useIncomeCalculator({ parsePdf, downloadExcel }: IncomeCalculato
     reset,
     setGubun,
     handleFile,
+    handleFiles,
     showSummary,
     downloadExcel,
     retryWithPassword,

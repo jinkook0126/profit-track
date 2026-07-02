@@ -33,6 +33,12 @@ export async function action({ request }: Route.ActionArgs) {
       }
     }
 
+    transactions.sort((a, b) => {
+      const dateA = a.transactionDate ?? '';
+      const dateB = b.transactionDate ?? '';
+      return dateB.localeCompare(dateA);
+    });
+
     return data({ transactions });
   } catch (error) {
     console.error('거래 데이터 파싱 실패:', error);
