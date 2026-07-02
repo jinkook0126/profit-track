@@ -93,10 +93,16 @@ export function useIncomeCalculator({ parsePdf, downloadExcel }: IncomeCalculato
           dispatch({ type: 'CLEAR_PASSWORD' });
         }
       } catch (e) {
-        const errorMessage = e instanceof Error ? e.message : String(e);
+        const error = e as any;
+        const errorMessage = error?.message || String(e);
 
-        // 비밀번호 필요 에러 감지
-        if (errorMessage.includes('requiresPassword') || errorMessage.includes('비밀번호')) {
+        // 비밀번호 필요 에러 감지 (클라이언트 측 PDF 로드 에러)
+        if (
+          errorMessage.includes('No password given') ||
+          errorMessage.includes('password required') ||
+          errorMessage.includes('Invalid password') ||
+          error?.requiresPassword
+        ) {
           dispatch({ type: 'PASSWORD_REQUIRED', fileName: file.name, file });
         } else {
           dispatch({ type: 'ERROR', errorMsg: errorMessage });

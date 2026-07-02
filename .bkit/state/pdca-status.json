@@ -1,10 +1,11 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-07-01T08:14:13.349Z",
+  "lastUpdated": "2026-07-02T00:32:06.383Z",
   "activeFeatures": [
     "income-calculator",
     "routes",
-    "api"
+    "api",
+    "profit-track"
   ],
   "primaryFeature": "income-calculator",
   "features": {
@@ -17,9 +18,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-07-01T06:18:30.831Z",
-        "lastUpdated": "2026-07-01T08:14:13.349Z"
+        "lastUpdated": "2026-07-02T00:11:01.568Z"
       },
-      "lastFile": "D:\\jinqook\\profit-track\\app\\components\\income-calculator\\types\\index.ts"
+      "lastFile": "D:\\jinqook\\profit-track\\app\\components/income-calculator/hooks/use-income-calculator.ts"
     },
     "routes": {
       "phase": "do",
@@ -30,7 +31,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-07-01T06:20:19.963Z",
-        "lastUpdated": "2026-07-01T08:13:16.433Z"
+        "lastUpdated": "2026-07-02T00:21:09.887Z"
       },
       "lastFile": "D:\\jinqook\\profit-track\\app\\routes\\index.tsx"
     },
@@ -43,9 +44,22 @@
       "documents": {},
       "timestamps": {
         "started": "2026-07-01T08:12:07.056Z",
-        "lastUpdated": "2026-07-01T08:12:12.930Z"
+        "lastUpdated": "2026-07-02T00:10:53.986Z"
       },
       "lastFile": "D:\\jinqook\\profit-track\\app\\routes\\api\\pdf-parsing.ts"
+    },
+    "profit-track": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-07-02T00:10:17.211Z",
+        "lastUpdated": "2026-07-02T00:32:06.383Z"
+      },
+      "lastFile": "D:\\jinqook\\profit-track\\app\\lib\\parsing.client.ts"
     }
   },
   "pipeline": {
@@ -56,7 +70,7 @@
   "session": {
     "startedAt": "2026-07-01T05:39:23.200Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-07-01T08:14:13.349Z"
+    "lastActivity": "2026-07-02T00:32:06.383Z"
   },
   "history": [
     {
@@ -206,6 +220,66 @@
     {
       "timestamp": "2026-07-01T08:14:13.349Z",
       "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:10:17.211Z",
+      "feature": "profit-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:10:25.661Z",
+      "feature": "profit-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:10:31.350Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:10:38.104Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:10:49.040Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:10:53.986Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:11:01.568Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:11:06.529Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:21:09.887Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-02T00:32:06.383Z",
+      "feature": "profit-track",
       "phase": "do",
       "action": "updated"
     }

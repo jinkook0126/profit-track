@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useFetcher } from 'react-router';
 
 import { IncomeCalculator } from '@/components/income-calculator';
+import { chunkPages, extractPdfData } from '@/lib/parsing.client';
 import type { Transaction } from '@/types/table';
 
 import type { Route } from './+types/index';
@@ -40,33 +41,31 @@ export default function Home() {
     pendingRef.current = null;
 
     if (fetcher.data?.error) {
-      const error = new Error(fetcher.data.error);
-      if (fetcher.data.requiresPassword) {
-        (error as any).requiresPassword = true;
-      }
-      pending.reject(error);
+      pending.reject(new Error(fetcher.data.error));
       return;
     }
     pending.resolve(fetcher.data?.transactions ?? []);
   }, [fetcher.state, fetcher.data]);
 
   const parsePdf = useCallback(
-    (file: File, password?: string) => {
+    async (file: File, password?: string): Promise<Transaction[]> => {
       if (fetcher.state !== 'idle') {
-        return Promise.reject(new Error('이미 파싱이 진행 중입니다.'));
+        throw new Error('이미 파싱이 진행 중입니다.');
       }
 
+      // 클라이언트에서 PDF 파싱
+      const pages = await extractPdfData(file, password);
+
+      // 파싱된 raw data를 서버로 전송
       return new Promise<Transaction[]>((resolve, reject) => {
         pendingRef.current = { resolve, reject };
 
         const formData = new FormData();
-        formData.append('file', file);
-        if (password) formData.append('password', password);
+        formData.append('data', JSON.stringify(chunkPages(pages, 5)));
 
         fetcher.submit(formData, {
           method: 'POST',
           action: '/api/pdf-parsing',
-          encType: 'multipart/form-data',
         });
       });
     },
