@@ -43,12 +43,25 @@ export function IncomeCalculator(props: IncomeCalculatorProps) {
         <Stepper step={activeStep} />
 
         {state.status === 'idle' && <UploadZone onFiles={handleFiles} />}
-        {state.status === 'parsing' && <ParsingPanel fileName={state.fileName} />}
+        {state.status === 'parsing' && !state.requiresPassword && (
+          <ParsingPanel
+            fileName={state.fileName}
+            progressCurrent={state.progressCurrent}
+            progressTotal={state.progressTotal}
+          />
+        )}
         {state.status === 'error' && !state.requiresPassword && (
           <ErrorPanel message={state.errorMsg} onReset={reset} />
         )}
-        {state.status === 'error' && state.requiresPassword && (
-          <ErrorPanel message={state.errorMsg} onReset={reset} />
+        {state.requiresPassword && (
+          <ErrorPanel
+            message={
+              state.progressTotal > 1
+                ? `${state.progressTotal}개 중 ${state.progressCurrent}번째 파일이 비밀번호로 보호되어 있습니다.`
+                : '비밀번호 보호된 PDF입니다.'
+            }
+            onReset={reset}
+          />
         )}
         {state.status === 'empty' && <EmptyPanel onReset={reset} />}
         {state.status === 'ready' && (
@@ -74,6 +87,7 @@ export function IncomeCalculator(props: IncomeCalculatorProps) {
           onSubmit={handlePasswordSubmit}
           onCancel={reset}
           isLoading={state.status === 'parsing'}
+          errorMessage={state.errorMsg}
         />
       )}
     </div>

@@ -20,6 +20,10 @@ export interface IncomeCalculatorState {
   errorMsg: string;
   requiresPassword: boolean;
   fileForPasswordRetry?: File;
+  /** 다중 파일 처리 시 현재 파일 번호 (1-based) */
+  progressCurrent: number;
+  /** 다중 파일 처리 시 전체 파일 개수 */
+  progressTotal: number;
 }
 
 export const INITIAL_INCOME_CALCULATOR_STATE: IncomeCalculatorState = {
@@ -29,6 +33,8 @@ export const INITIAL_INCOME_CALCULATOR_STATE: IncomeCalculatorState = {
   showSummary: false,
   errorMsg: '',
   requiresPassword: false,
+  progressCurrent: 0,
+  progressTotal: 0,
 };
 
 // ─── Computation Results ───
@@ -74,6 +80,8 @@ export interface UploadZoneProps {
 
 export interface ParsingPanelProps {
   fileName: string;
+  progressCurrent?: number;
+  progressTotal?: number;
 }
 
 export interface ErrorPanelProps {

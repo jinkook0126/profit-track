@@ -65,6 +65,43 @@ export function chunkPages<T>(pages: T[], size: number): T[][] {
   return chunks;
 }
 
+export type PdfAccessStatus = 'ok' | 'need-password' | 'incorrect-password';
+
+function resolvePasswordFailure(error: unknown, hadPassword: boolean): PdfAccessStatus | null {
+  const err = error as { name?: string; code?: number; message?: string };
+  const message = err?.message ?? String(error);
+  const name = err?.name ?? '';
+  const code = err?.code;
+
+  const isPasswordError =
+    name === 'PasswordException' || code === 1 || code === 2 || /password/i.test(message);
+
+  if (!isPasswordError) return null;
+
+  if (code === 2 || /incorrect|invalid/i.test(message) || hadPassword) {
+    return 'incorrect-password';
+  }
+
+  return 'need-password';
+}
+
+/** 브라우저에서 PDF 암호 보호 여부와 비밀번호 유효성을 확인합니다. */
+export async function checkPdfAccess(file: File, password?: string): Promise<PdfAccessStatus> {
+  const pdfData = new Uint8Array(await file.arrayBuffer());
+  const pdfOptions: Record<string, unknown> = { data: pdfData };
+  if (password) pdfOptions.password = String(password);
+
+  try {
+    const pdf = await getDocument(pdfOptions).promise;
+    await pdf.cleanup();
+    return 'ok';
+  } catch (error) {
+    const status = resolvePasswordFailure(error, Boolean(password));
+    if (status) return status;
+    throw error;
+  }
+}
+
 /**
  * PDF 파일에서 거래 데이터 테이블 추출
  * 클라이언트 측에서 PDF를 로드하고 파싱하여 raw 데이터를 반환합니다.

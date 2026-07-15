@@ -4,9 +4,15 @@ interface PasswordDialogProps {
   onSubmit: (password: string) => void;
   onCancel: () => void;
   isLoading?: boolean;
+  errorMessage?: string;
 }
 
-export function PasswordDialog({ onSubmit, onCancel, isLoading }: PasswordDialogProps) {
+export function PasswordDialog({
+  onSubmit,
+  onCancel,
+  isLoading,
+  errorMessage,
+}: PasswordDialogProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = useCallback(
@@ -23,9 +29,7 @@ export function PasswordDialog({ onSubmit, onCancel, isLoading }: PasswordDialog
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
       <div className="w-full max-w-[400px] rounded-[16px] bg-white px-6 py-7 shadow-xl">
-        <h2 className="text-[16.5px] font-extrabold text-[#16223a]">
-          비밀번호 입력 필요
-        </h2>
+        <h2 className="text-[16.5px] font-extrabold text-[#16223a]">비밀번호 입력 필요</h2>
         <p className="mt-2 text-[13px] text-[#6b7a90]">
           이 PDF 파일은 비밀번호로 보호되어 있습니다. 계속하려면 비밀번호를 입력하세요.
         </p>
@@ -39,6 +43,10 @@ export function PasswordDialog({ onSubmit, onCancel, isLoading }: PasswordDialog
             disabled={isLoading}
             className="rounded-[8px] border border-[#d4dbe6] bg-white px-4 py-3 text-[13.5px] placeholder-[#9aa6b8] outline-none transition-colors focus:border-[#3f78d6] focus:bg-[#f7faff] disabled:opacity-50"
           />
+
+          {errorMessage && errorMessage !== '비밀번호 보호된 PDF입니다.' && (
+            <p className="text-[12.5px] font-medium text-[#c0392b]">{errorMessage}</p>
+          )}
 
           <div className="flex gap-3">
             <button
