@@ -80,7 +80,7 @@ export function TransactionTable({
                 출금액
               </TableHead>
               <TableHead className="border-b border-[#e1e8f2] py-[11px] pr-3.5 pl-3.5 text-[11.5px] font-bold whitespace-nowrap text-[#5c6b82]">
-                거래처 / 메모
+                메모 / 거래처
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -149,7 +149,7 @@ export function TransactionTable({
                   {!isIncome(row.transactionType) ? fmt(parseAmount(row.amount)) : '–'}
                 </TableCell>
                 <TableCell className="max-w-[200px] overflow-hidden py-2.5 pr-3.5 pl-3.5 text-[12.5px] text-ellipsis whitespace-nowrap text-[#6b7a90]">
-                  {row.note || '—'}
+                  {row.memo || '—'}
                 </TableCell>
               </TableRow>
             ))}
