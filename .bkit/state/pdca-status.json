@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-07-16T04:59:39.373Z",
+  "lastUpdated": "2026-07-16T06:11:24.456Z",
   "activeFeatures": [
     "income-calculator",
     "routes",
@@ -18,9 +18,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-07-01T06:18:30.831Z",
-        "lastUpdated": "2026-07-16T04:59:39.373Z"
+        "lastUpdated": "2026-07-16T06:11:24.455Z"
       },
-      "lastFile": "d:\\jinqook\\profit-track\\app\\components\\income-calculator\\components\\transaction-table.tsx"
+      "lastFile": "d:\\jinqook\\profit-track\\app\\components\\income-calculator\\types\\index.ts"
     },
     "routes": {
       "phase": "do",
@@ -31,7 +31,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-07-01T06:20:19.963Z",
-        "lastUpdated": "2026-07-16T03:52:22.564Z"
+        "lastUpdated": "2026-07-16T06:01:07.518Z"
       },
       "lastFile": "d:\\jinqook\\profit-track\\app\\routes\\index.tsx"
     },
@@ -70,7 +70,7 @@
   "session": {
     "startedAt": "2026-07-01T05:39:23.200Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-07-16T04:59:39.373Z"
+    "lastActivity": "2026-07-16T06:11:24.456Z"
   },
   "history": [
     {
@@ -411,6 +411,108 @@
     },
     {
       "timestamp": "2026-07-16T04:59:39.373Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T05:31:39.829Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T05:31:53.075Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T05:31:59.971Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T05:32:05.679Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T05:32:11.537Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T05:39:05.257Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:01:07.518Z",
+      "feature": "routes",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:07:34.920Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:07:56.244Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:08:06.692Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:08:14.208Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:08:21.326Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:10:49.066Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:11:00.241Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:11:12.058Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:11:17.169Z",
+      "feature": "income-calculator",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-16T06:11:24.455Z",
       "feature": "income-calculator",
       "phase": "do",
       "action": "updated"

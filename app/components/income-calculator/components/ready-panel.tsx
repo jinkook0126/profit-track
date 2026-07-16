@@ -14,8 +14,6 @@ export function ReadyPanel({
   onGubunChange,
   onExcludeChange,
   onShowSummary,
-  onDownloadExcel,
-  downloadDisabled,
 }: ReadyPanelProps) {
   return (
     <div className="flex animate-[scfade_.35s_ease] flex-col gap-5">
@@ -47,15 +45,7 @@ export function ReadyPanel({
         </span>
       </div>
 
-      {showSummary && (
-        <MonthlySummaryTable
-          monthly={monthly}
-          tIn={tIn}
-          tOut={tOut}
-          onDownloadExcel={onDownloadExcel}
-          downloadDisabled={downloadDisabled}
-        />
-      )}
+      {showSummary && <MonthlySummaryTable monthly={monthly} tIn={tIn} tOut={tOut} />}
     </div>
   );
 }

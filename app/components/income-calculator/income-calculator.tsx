@@ -23,7 +23,6 @@ export function IncomeCalculator(props: IncomeCalculatorProps) {
     toggleExcluded,
     handleFiles,
     showSummary,
-    downloadExcel,
     retryWithPassword,
   } = useIncomeCalculator(props);
   const { monthly, tIn, tOut } = computed;
@@ -76,8 +75,6 @@ export function IncomeCalculator(props: IncomeCalculatorProps) {
             onGubunChange={setGubun}
             onExcludeChange={toggleExcluded}
             onShowSummary={showSummary}
-            onDownloadExcel={() => downloadExcel?.(state.rows)}
-            downloadDisabled={!downloadExcel}
           />
         )}
       </main>

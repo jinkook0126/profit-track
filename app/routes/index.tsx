@@ -19,13 +19,6 @@ type PdfParsingResult = {
   detail?: string;
 };
 
-/**
- * TODO: xlsx 등을 사용해 엑셀 다운로드를 구현하세요.
- */
-function downloadExcel(_rows: Transaction[]): void {
-  alert('엑셀 다운로드 구현 예정');
-}
-
 async function parsePdf(file: File, password?: string): Promise<Transaction[]> {
   const formData = new FormData();
   formData.append('file', file);
@@ -58,5 +51,5 @@ async function parsePdf(file: File, password?: string): Promise<Transaction[]> {
 }
 
 export default function Home() {
-  return <IncomeCalculator parsePdf={parsePdf} downloadExcel={downloadExcel} />;
+  return <IncomeCalculator parsePdf={parsePdf} />;
 }
