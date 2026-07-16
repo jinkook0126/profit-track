@@ -1,3 +1,5 @@
+import ExcelJS from 'exceljs';
+
 import { Badge } from '@/components/ui/badge';
 import {
   Table,
@@ -23,6 +25,79 @@ export function TransactionTable({
 }: TransactionTableProps) {
   const excludedCount = rows.filter((r) => r.excluded).length;
 
+  const handleDownloadExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('거래내역');
+
+    worksheet.columns = [
+      { header: '거래일자', width: 12 },
+      { header: '거래시간', width: 10 },
+      { header: '구분', width: 8 },
+      { header: '적요/내용', width: 25 },
+      { header: '입금액', width: 12 },
+      { header: '출금액', width: 12 },
+      { header: '메모/거래처', width: 40 },
+    ];
+
+    const headerStyle = {
+      font: {
+        bold: true,
+        color: { argb: 'FFFFFFFF' },
+        size: 11,
+      },
+      fill: {
+        type: 'pattern' as const,
+        pattern: 'solid' as const,
+        fgColor: { argb: 'FF123A78' },
+      },
+      alignment: {
+        horizontal: 'center' as const,
+        vertical: 'middle' as const,
+        wrapText: true,
+      },
+      border: {
+        top: { style: 'thin' as const, color: { argb: 'FF000000' } },
+        bottom: { style: 'thin' as const, color: { argb: 'FF000000' } },
+        left: { style: 'thin' as const, color: { argb: 'FF000000' } },
+        right: { style: 'thin' as const, color: { argb: 'FF000000' } },
+      },
+    };
+
+    const headerRow = worksheet.getRow(1);
+    worksheet.columns.forEach((_, colIndex) => {
+      const cell = headerRow.getCell(colIndex + 1);
+      cell.font = headerStyle.font;
+      cell.fill = headerStyle.fill;
+      cell.alignment = headerStyle.alignment;
+      cell.border = headerStyle.border;
+    });
+
+    rows.forEach((row) => {
+      worksheet.addRow([
+        row.transactionDate || '',
+        row.transactionTime || '',
+        row.transactionType || '',
+        row.description || '',
+        isIncome(row.transactionType) ? parseAmount(row.amount) : '',
+        !isIncome(row.transactionType) ? parseAmount(row.amount) : '',
+        row.memo || '',
+      ]);
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = '거래내역.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="overflow-hidden rounded-[14px] border border-[#e1e8f2] bg-white shadow-[0_1px_3px_rgba(20,40,80,.05)]">
       <div className="flex flex-wrap items-center gap-3.5 border-b border-[#eef2f7] px-[18px] py-[15px]">
@@ -35,7 +110,7 @@ export function TransactionTable({
             {excludedCount}건 제외 중
           </Badge>
         )}
-        <div className="ml-auto flex flex-wrap gap-2.5">
+        <div className="ml-auto flex flex-wrap items-center gap-2.5">
           <div className="flex items-center gap-1.5 rounded-[9px] border border-[#cdeede] bg-[#e9f7f0] px-3 py-1.5">
             <span className="text-[11px] font-bold text-[#147a4d]">총 수입</span>
             <span className="text-[13.5px] font-extrabold text-[#0f6b41] tabular-nums">
@@ -54,6 +129,16 @@ export function TransactionTable({
               {fmt(tIn - tOut)}
             </span>
           </div>
+          <button
+            onClick={() => handleDownloadExcel()}
+            className="flex cursor-pointer items-center gap-1.5 rounded-[9px] bg-[#147a4d] px-3 py-1.5 text-[12px] font-bold text-white shadow-[0_4px_12px_rgba(20,122,77,.28)] transition-colors hover:bg-[#0f6b41]"
+            title="거래내역을 엑셀 파일로 다운로드"
+          >
+            <span className="rounded bg-white/20 px-1.5 py-0.5 font-mono text-[9px] font-extrabold">
+              XLSX
+            </span>
+            엑셀 다운로드
+          </button>
         </div>
       </div>
 
